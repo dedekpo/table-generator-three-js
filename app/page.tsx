@@ -1,113 +1,141 @@
-import Image from 'next/image'
+"use client";
+
+import Experience from "@/components/scene/experience";
+import Editor from "@/components/scene/editor";
+import { useRef, useState } from "react";
+import { ConfigProps } from "@/types";
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+	const canvasRef = useRef<HTMLCanvasElement>(null);
+	const [tables, setTables] = useState<ConfigProps[]>([]);
+	const [selectedTableIndex, setSelectedTableIndex] = useState<
+		number | undefined
+	>(undefined);
+	const [config, setConfig] = useState<ConfigProps>({
+		tableWidth: 2,
+		tableDepth: 2,
+		tableHeight: 0.05,
+		legWidth: 0.1,
+		legHeight: 0.5,
+		roundedLeg: false,
+		tableColor: "#000000",
+		legColor: "#4e2929",
+		tableTexture: null,
+		legTexture: null,
+	});
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+	function handleCreateTable() {
+		setTables([
+			...tables,
+			{
+				tableWidth: 2,
+				tableDepth: 2,
+				tableHeight: 0.05,
+				legWidth: 0.1,
+				legHeight: 0.5,
+				roundedLeg: false,
+				tableColor: "#000000",
+				legColor: "#4e2929",
+				tableTexture: null,
+				legTexture: null,
+			},
+		]);
+	}
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+	function handleSelectTable(index: number) {
+		setSelectedTableIndex(index);
+		setConfig({
+			tableWidth: tables[index].tableWidth,
+			tableDepth: tables[index].tableDepth,
+			tableHeight: tables[index].tableHeight,
+			legWidth: tables[index].legWidth,
+			legHeight: tables[index].legHeight,
+			roundedLeg: tables[index].roundedLeg,
+			tableColor: tables[index].tableColor,
+			legColor: tables[index].legColor,
+			tableTexture: tables[index].tableTexture,
+			legTexture: tables[index].legTexture,
+		});
+	}
+	function handleConfigChange(key: string, value: any) {
+		setTables(
+			tables.map((_, index) =>
+				index === selectedTableIndex ? { ..._, [key]: value } : _
+			)
+		);
+		setConfig({
+			...config,
+			[key]: value,
+		});
+	}
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+	function handleConfigDownload() {
+		const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
+			JSON.stringify(tables)
+		)}`;
+		const link = document.createElement("a");
+		link.href = jsonString;
+		link.download = "data.json";
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
+		link.click();
+	}
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+	function handleConfigUpload(e: any) {
+		const fileReader = new FileReader();
+		fileReader.readAsText(e.target.files[0], "UTF-8");
+		fileReader.onload = (e: any) => {
+			const parsedResult = JSON.parse(e.target.result);
+			setTables(parsedResult);
+			setSelectedTableIndex(undefined);
+		};
+	}
+
+	return (
+		<div className="relative w-screen h-screen">
+			<div className="absolute bottom-3 left-3 flex gap-3 items-center z-10">
+				<button
+					className="border-2 p-2 rounded-md border-green-500 text-green-500 hover:bg-green-200"
+					onClick={handleConfigDownload}
+				>
+					Export JSON
+				</button>
+				<input
+					type="file"
+					accept="application/json"
+					onChange={handleConfigUpload}
+				/>
+			</div>
+			<div className="flex items-center gap-3 absolute top-5 left-[20%] z-10">
+				<button
+					onClick={handleCreateTable}
+					className="block border-2 p-2 rounded-md border-green-500 text-green-500 hover:bg-green-200"
+				>
+					Create new table
+				</button>
+				{tables.map((_, index) => (
+					<button
+						onClick={() => handleSelectTable(index)}
+						key={index}
+						className={`${
+							selectedTableIndex === index && "bg-gray-200"
+						} border-2 px-2 py-1 rounded-md`}
+					>
+						Table {index + 1}
+					</button>
+				))}
+			</div>
+			{tables.length > 0 && (
+				<Editor
+					currentConfig={tables[selectedTableIndex || 0]}
+					handleConfigChange={handleConfigChange}
+					canvasRef={canvasRef}
+				/>
+			)}
+			<Experience
+				visible={selectedTableIndex !== undefined}
+				config={config}
+				canvasRef={canvasRef}
+			/>
+		</div>
+	);
 }
