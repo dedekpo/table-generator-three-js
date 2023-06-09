@@ -91,7 +91,7 @@ export default function Home() {
 	}
 
 	return (
-		<div className="relative w-screen h-screen">
+		<div className="relative w-screen h-screen overflow-hidden">
 			<div className="absolute bottom-3 left-3 flex gap-3 items-center z-10">
 				<button
 					className="border-2 p-2 rounded-md border-green-500 text-green-500 hover:bg-green-200"

@@ -28,14 +28,27 @@ export default function Experience({
 	return (
 		<Canvas
 			ref={canvasRef}
-			shadows
 			camera={{ position: [3, 1, 3], fov: 45 }}
 			gl={{ preserveDrawingBuffer: true }}
 		>
 			<ambientLight />
+			<pointLight position={[10, 10, 10]} />
 			<group visible={visible} position={[0, -0.5, 0]}>
 				<Table config={config} />
-				<Grid position={[0, -0.01, 0]} args={[10.5, 10.5]} />
+				<Grid
+					position={[0, -0.01, 0]}
+					args={[10.5, 10.5]}
+					cellSize={0.6}
+					cellThickness={1}
+					cellColor={"#6f6f6f"}
+					sectionSize={3.3}
+					sectionThickness={1.5}
+					sectionColor={"#000000"}
+					fadeDistance={25}
+					fadeStrength={1}
+					followCamera={false}
+					infiniteGrid={true}
+				/>
 			</group>
 			<OrbitControls makeDefault />
 			<Environment preset="city" />
@@ -62,7 +75,7 @@ function Table({ config }: { config: ConfigProps }) {
 
 	return (
 		<Center top>
-			<mesh ref={meshRef} castShadow position={[0, config.legHeight, 0]}>
+			<mesh ref={meshRef} position={[0, config.legHeight, 0]}>
 				<boxGeometry
 					args={[
 						config.tableWidth,
