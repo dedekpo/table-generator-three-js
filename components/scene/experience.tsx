@@ -32,7 +32,6 @@ export default function Experience({
 			gl={{ preserveDrawingBuffer: true }}
 		>
 			<ambientLight />
-			<pointLight position={[10, 10, 10]} />
 			<group visible={visible} position={[0, -0.5, 0]}>
 				<Table config={config} />
 				<Grid
